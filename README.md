@@ -1,5 +1,6 @@
 # Charge Alert
 An Android app which plays notification sounds when a charger is plugged in or unplugged
+<img width="300" alt="screenshot" src="screenshot.png" />
 
 # Licence
 This repo is licensed with AGPL3.0, a copyleft license.  

@@ -1,23 +1,20 @@
 package com.scaleshift.chargealert
 
 import android.content.Context
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import android.media.RingtoneManager
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -78,81 +75,60 @@ fun SoundDropdownMenu(
     val sounds = remember { getNotificationSounds(context) }
 
     //Menu display
-    val menuWidth = 180f
-
     var showMenu by remember { mutableStateOf(false) }
 
     Surface(
         modifier = Modifier.padding(16.dp)
     ) {
         Column(
-            modifier = Modifier
-                .width(250.dp)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.Start
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Text(
-                label,
-                style = MaterialTheme.typography.titleMedium
-            )
-
-            Box(
-                modifier = Modifier.height(300.dp),
-                contentAlignment = Alignment.TopStart
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(
-                    onClick = { showMenu = !showMenu }
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.MoreVert,
-                        contentDescription = "Menu"
-                    )
-                }
+                Text(
+                    label,
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.weight(1f)
+                )
 
-                if (showMenu) {
-                    ElevatedCard(
-                        modifier = Modifier
-                            .padding(top = 40.dp)
-                            .width(menuWidth.dp)
-                            .height(300.dp), //to scroll
-                        shape = RoundedCornerShape(4.dp),
-                        elevation = CardDefaults.elevatedCardElevation(
-                            defaultElevation = 8.dp
-                        )
+                Box {
+                    IconButton(
+                        onClick = { showMenu = !showMenu }
                     ) {
-                        Column(
-                            modifier = Modifier
-                                .padding(vertical = 8.dp)
-                                .verticalScroll(rememberScrollState()) //to scroll
+                        Icon(
+                            imageVector = Icons.Filled.MoreVert,
+                            contentDescription = "Menu"
+                        )
+                    }
+
+
+                    if (showMenu) {
+                        DropdownMenu(
+                            expanded = true,
+                            onDismissRequest = { showMenu = false }
                         ) {
-                            //Generate list of available sounds dynamically
                             sounds.forEach { sound ->
                                 DropdownMenuItem(
                                     text = { Text(sound.title) },
                                     onClick = {
-                                        //Hide dropdown menu
                                         showMenu = false
 
-                                        //Save selection
-                                        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                                        val prefs = context.getSharedPreferences(
+                                            PREFS_NAME,
+                                            Context.MODE_PRIVATE
+                                        )
                                         prefs.edit {
                                             putString(preferenceKey, sound.uri.toString())
                                         }
 
-                                        //Play preview sound
-                                        val ringtone = RingtoneManager.getRingtone(context, sound.uri)
+                                        val ringtone =
+                                            RingtoneManager.getRingtone(context, sound.uri)
                                         ringtone?.play()
                                     }
                                 )
                             }
-
-                            //DropdownMenuItem(
-                            //    text = { Text("Create New Item") },
-                            //    onClick = { showMenu = false },
-                            //    leadingIcon = {
-                            //        Icon(Icons.Filled.Add, contentDescription = null)
-                            //    }
-                            //)
                         }
                     }
                 }
