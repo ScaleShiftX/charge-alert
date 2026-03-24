@@ -1,5 +1,8 @@
 package com.scaleshift.chargealert
 
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.platform.LocalConfiguration
 import android.content.Context
 import android.media.RingtoneManager
 import androidx.compose.foundation.layout.Arrangement
@@ -10,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -105,12 +109,15 @@ fun SoundDropdownMenu(
 
 
                     if (showMenu) {
+                        val screenHeight = LocalConfiguration.current.screenHeightDp.dp
+
                         DropdownMenu(
                             expanded = true,
-                            onDismissRequest = { showMenu = false }
+                            onDismissRequest = { showMenu = false },
+                            modifier = Modifier
+                                .heightIn(max = screenHeight * 2 / 3)
                         ) {
                             sounds.forEach { sound ->
-                                //A dropdown menu item is created for every notification sound on the system
                                 DropdownMenuItem(
                                     text = { Text(sound.title) },
                                     onClick = {
