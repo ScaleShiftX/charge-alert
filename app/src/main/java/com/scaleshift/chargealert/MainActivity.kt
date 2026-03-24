@@ -23,7 +23,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        //Start Alerts service
+        //Start Alerts service - this is the main service that causes the alerts to fire
+        //We actually have two places where the service can be started:
+        //Opening up the app: MainActivity.onCreate(): startForegroundService()
+        //Booting up the phone: BootReceiver.onReceive(): startForegroundService()
+        //startForegroundService() is not idempotent, but it won't create two services
+        //It will just call onStartCommand() again, which is fine as we aren't overriding that method anyway
         val intent = Intent(this, Alerts::class.java)
         startForegroundService(intent)
 

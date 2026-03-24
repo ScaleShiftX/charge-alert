@@ -2,10 +2,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Needed for foreground, which is needed to keep the app from being optimized into oblivion -->
+    <!-- Needed to launch at phone startup -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
+    <!--
+        Needed for foreground, which is needed to keep the app from being optimized into oblivion
+        Previously used FOREGROUND_SERVICE_DATA_SYNC, but that is disallowed for startup apps
+        FOREGROUND_SERVICE_CONNECTED_DEVICE requires other perms for connecting another device,
+        and is not talking about connecting this device to power
+        FOREGROUND_SERVICE_SPECIAL_USE seems to work fine, though may cause issues if submitted to the Play Store
+    -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"
         tools:ignore="ForegroundServicesPolicy" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
 
     <application
         android:allowBackup="true"
@@ -27,14 +36,26 @@
             </intent-filter>
         </activity>
 
+        <!-- Start service at phone startup -->
+        <receiver
+            android:name=".BootReceiver"
+            android:enabled="true"
+            android:exported="true"
+        >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+
         <!-- Originally this was a receiver, but Android was optimizing it into not working -->
         <!-- Have tried exporting and not exporting. Didn't seem to make any difference -->
         <service
             android:name=".Alerts"
             android:exported="false"
-            android:foregroundServiceType="dataSync"
+            android:foregroundServiceType="specialUse"
         >
-            <!-- Intent filter is no longer needed because we register manually now instead of using BroadcastReceivers anymore -->
+            <!-- Intent filter for connecting/disconnecting is no longer needed because -->
+            <!-- we register manually now instead of using BroadcastReceivers anymore -->
             <!--
             <intent-filter>
                 --><!--

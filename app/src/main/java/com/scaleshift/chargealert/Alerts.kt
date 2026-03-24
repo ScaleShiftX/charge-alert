@@ -61,6 +61,7 @@ class Alerts : Service() {
     }
 
     //An arbitrary foreground service to prevent optimization from preventing this app from running in the background
+    //Registering the receiver here is what actually results in onReceive() firing above when plugging in/unplugging
     override fun onCreate() {
         super.onCreate()
 
