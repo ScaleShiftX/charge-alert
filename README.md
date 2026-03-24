@@ -1,5 +1,6 @@
 # Charge Alert
 An Android app which plays a notification sound when a charger is plugged in or unplugged. You can pick which sound it plays, which can be different for plugging in and unplugging, from a dropdown of all the notification sound variants on your phone.
+
 <img width="300" alt="screenshot" src="screenshot.png" />
 
 # Licence
