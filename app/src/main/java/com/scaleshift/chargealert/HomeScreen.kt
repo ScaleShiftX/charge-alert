@@ -110,6 +110,7 @@ fun SoundDropdownMenu(
                             onDismissRequest = { showMenu = false }
                         ) {
                             sounds.forEach { sound ->
+                                //A dropdown menu item is created for every notification sound on the system
                                 DropdownMenuItem(
                                     text = { Text(sound.title) },
                                     onClick = {
