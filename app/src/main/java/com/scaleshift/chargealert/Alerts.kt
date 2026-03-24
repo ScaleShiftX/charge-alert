@@ -76,6 +76,16 @@ class Alerts : Service() {
         startForeground(1, createNotification())
     }
 
+    //Appears necessary for launching on boot based on testing
+    //Emulator worked fine without this, but physical device did not
+    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        //Required foreground notification
+        startForeground(1, createNotification())
+
+        //Restart service if killed (no intent)
+        return START_STICKY
+    }
+
     override fun onDestroy() {
         unregisterReceiver(receiver)
         super.onDestroy()

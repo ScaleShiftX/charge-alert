@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
         //Opening up the app: MainActivity.onCreate(): startForegroundService()
         //Booting up the phone: BootReceiver.onReceive(): startForegroundService()
         //startForegroundService() is not idempotent, but it won't create two services
-        //It will just call onStartCommand() again, which is fine as we aren't overriding that method anyway
+        //It will just call onStartCommand() again, which should be fine
         val intent = Intent(this, Alerts::class.java)
         startForegroundService(intent)
 
