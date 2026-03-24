@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Needed for foreground, which is needed to keep the app from being optimized into oblivion -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"
+        tools:ignore="ForegroundServicesPolicy" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -21,6 +26,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Originally this was a receiver, but Android was optimizing it into not working -->
+        <!-- Have tried exporting and not exporting. Didn't seem to make any difference -->
+        <service
+            android:name=".Alerts"
+            android:exported="false"
+            android:foregroundServiceType="dataSync"
+        >
+            <!-- Intent filter is no longer needed because we register manually now instead of using BroadcastReceivers anymore -->
+            <!--
+            <intent-filter>
+                --><!--
+                Which are the correct intents?
+                ACTION_POWER_CONNECTED
+                ACTION_POWER_DISCONNECTED
+                or
+                POWER_CONNECTED
+                POWER_DISCONNECTED
+                --><!--
+                <action android:name="android.intent.action.POWER_CONNECTED"/>
+                <action android:name="android.intent.action.POWER_DISCONNECTED"/>
+            </intent-filter>
+            -->
+        </service>
     </application>
 
 </manifest>

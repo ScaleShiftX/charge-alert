@@ -2,6 +2,7 @@ package com.scaleshift.chargealert
 
 import android.content.Intent
 import android.content.IntentFilter
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -22,15 +23,16 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        //Test
-        Log.d("ChargeAlert", "Henlos! MainActivity onCreate")
+        //Start Alerts service
+        val intent = Intent(this, Alerts::class.java)
+        startForegroundService(intent)
 
-        //Register Alerts as a broadcast receiver
-        val alerts = Alerts()
-        val intentFilter = IntentFilter()
-        intentFilter.addAction(Intent.ACTION_POWER_CONNECTED)
-        intentFilter.addAction(Intent.ACTION_POWER_DISCONNECTED)
-        this.registerReceiver(alerts, intentFilter)
+        ////Register Alerts as a broadcast receiver (this method only works while the app is open)
+        //val alerts = Alerts()
+        //val intentFilter = IntentFilter()
+        //intentFilter.addAction(Intent.ACTION_POWER_CONNECTED)
+        //intentFilter.addAction(Intent.ACTION_POWER_DISCONNECTED)
+        //this.registerReceiver(alerts, intentFilter)
 
         //Display
         setContent {
