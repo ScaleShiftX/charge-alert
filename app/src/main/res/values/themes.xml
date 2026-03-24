@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.ChargeAlert" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- Will be dark mode if the user sets their phone to dark mode in settings -->
+    <style name="Theme.ChargeAlert" parent="android:Theme.DeviceDefault.NoActionBar" />
 </resources>
